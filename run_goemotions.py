@@ -8,7 +8,7 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from tqdm import tqdm, trange
-from transformers.utils.dummy_pt_objects import XLNetForSequenceClassification
+
 from attrdict import AttrDict
 
 from transformers import (
@@ -19,6 +19,8 @@ from transformers import (
     AdamW,
     get_linear_schedule_with_warmup
 )
+
+from transformers import XLNetForSequenceClassification
 
 from model import BertForMultiLabelClassification, XLNetForMultiLabelClassification
 from utils import (
