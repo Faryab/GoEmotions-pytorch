@@ -13,11 +13,13 @@ from attrdict import AttrDict
 from transformers import (
     BertConfig,
     BertTokenizer,
+    XLNetConfig,
+    XLNetTokenizer,
     AdamW,
     get_linear_schedule_with_warmup
 )
 
-from model import BertForMultiLabelClassification
+from model import BertForMultiLabelClassification, XLNetForMultiLabelClassification
 from utils import (
     init_logger,
     set_seed,
@@ -224,20 +226,36 @@ def main(cli_args):
     processor = GoEmotionsProcessor(args)
     label_list = processor.get_labels()
 
-    config = BertConfig.from_pretrained(
-        args.model_name_or_path,
-        num_labels=len(label_list),
-        finetuning_task=args.task,
-        id2label={str(i): label for i, label in enumerate(label_list)},
-        label2id={label: i for i, label in enumerate(label_list)}
-    )
-    tokenizer = BertTokenizer.from_pretrained(
-        args.tokenizer_name_or_path,
-    )
-    model = BertForMultiLabelClassification.from_pretrained(
-        args.model_name_or_path,
-        config=config
-    )
+    if cli_args.taxonomy == 'original-xlnet':
+        config = XLNetConfig.from_pretrained(
+            args.model_name_or_path,
+            num_labels=len(label_list),
+            finetuning_task=args.task,
+            id2label={str(i): label for i, label in enumerate(label_list)},
+            label2id={label: i for i, label in enumerate(label_list)}
+        )
+        tokenizer = XLNetTokenizer.from_pretrained(
+            args.tokenizer_name_or_path,
+        )
+        model = XLNetForMultiLabelClassification.from_pretrained(
+            args.model_name_or_path,
+            config=config
+        )
+    else:
+        config = BertConfig.from_pretrained(
+            args.model_name_or_path,
+            num_labels=len(label_list),
+            finetuning_task=args.task,
+            id2label={str(i): label for i, label in enumerate(label_list)},
+            label2id={label: i for i, label in enumerate(label_list)}
+        )
+        tokenizer = BertTokenizer.from_pretrained(
+            args.tokenizer_name_or_path,
+        )
+        model = BertForMultiLabelClassification.from_pretrained(
+            args.model_name_or_path,
+            config=config
+        )
 
     # GPU or CPU
     args.device = "cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu"
