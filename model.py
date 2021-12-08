@@ -9,11 +9,11 @@ class XLNetForMultiLabelClassification(XLNetPreTrainedModel):
         self.num_labels = config.num_labels
 
         self.xlnet = XLNetModel(config)
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)
+        # self.dropout = nn.Dropout(config.hidden_dropout_prob)
         self.classifier = nn.Linear(config.hidden_size, self.config.num_labels)
         self.loss_fct = nn.BCEWithLogitsLoss()
-
         self.init_weights()
+        
 
     def forward(
             self,
@@ -35,7 +35,7 @@ class XLNetForMultiLabelClassification(XLNetPreTrainedModel):
         )
         pooled_output = outputs[1]
 
-        pooled_output = self.dropout(pooled_output)
+        # pooled_output = self.dropout(pooled_output)
         logits = self.classifier(pooled_output)
 
         outputs = (logits,) + outputs[2:]  # add hidden states and attention if they are here

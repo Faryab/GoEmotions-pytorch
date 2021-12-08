@@ -8,6 +8,7 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from tqdm import tqdm, trange
+from transformers.utils.dummy_pt_objects import XLNetForSequenceClassification
 from attrdict import AttrDict
 
 from transformers import (
@@ -237,10 +238,15 @@ def main(cli_args):
         tokenizer = XLNetTokenizer.from_pretrained(
             args.tokenizer_name_or_path,
         )
-        model = XLNetForMultiLabelClassification.from_pretrained(
+        # model = XLNetForMultiLabelClassification.from_pretrained(
+        #     args.model_name_or_path,
+        #     config=config
+        # )
+        model = XLNetForSequenceClassification.from_pretrained(
             args.model_name_or_path,
             config=config
         )
+
     else:
         config = BertConfig.from_pretrained(
             args.model_name_or_path,
