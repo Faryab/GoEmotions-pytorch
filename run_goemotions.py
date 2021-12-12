@@ -240,14 +240,14 @@ def main(cli_args):
         tokenizer = XLNetTokenizer.from_pretrained(
             args.tokenizer_name_or_path,
         )
-        # model = XLNetForMultiLabelClassification.from_pretrained(
-        #     args.model_name_or_path,
-        #     config=config
-        # )
-        model = XLNetForSequenceClassification.from_pretrained(
+        model = XLNetForMultiLabelClassification.from_pretrained(
             args.model_name_or_path,
             config=config
         )
+        # model = XLNetForSequenceClassification.from_pretrained(
+        #     args.model_name_or_path,
+        #     config=config
+        # )
 
     else:
         config = BertConfig.from_pretrained(
