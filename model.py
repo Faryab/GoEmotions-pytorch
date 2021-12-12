@@ -34,19 +34,27 @@ class XLNetForMultiLabelClassification(XLNetPreTrainedModel):
             inputs_embeds=inputs_embeds,
         )
 
+        print("outputs.shape: ", outputs.shape)
+        print("outputs")
         print(outputs)
-
+        
         pooled_output = outputs[1]
 
+        print("pooled_output ", pooled_output.shape)
+        print("pooled_output")
         print(pooled_output)
 
         # pooled_output = self.dropout(pooled_output)
         logits = self.classifier(pooled_output)
 
+        print("logits.shape: ", logits.shape)
+        print("logits")
         print(logits)
 
         outputs = (logits,) + outputs[2:]  # add hidden states and attention if they are here
 
+        print("outputs.shape: ", outputs.shape)
+        print("outputs")
         print(outputs)
 
         if labels is not None:
