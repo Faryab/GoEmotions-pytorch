@@ -1,7 +1,7 @@
 {
   "task": "goemotions",
   "data_dir": "data/original",
-  "ckpt_dir": "ckpt/original",
+  "ckpt_dir": "drive/MyDrive/EECS595 Final Project/roberta",
   "output_dir": "roberta-base-cased-goemotions-original",
   "train_file": "train.tsv",
   "dev_file": "dev.tsv",
