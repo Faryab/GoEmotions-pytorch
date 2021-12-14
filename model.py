@@ -1,6 +1,7 @@
 import torch.nn as nn
 from transformers import BertPreTrainedModel, BertModel
 from transformers import XLNetPreTrainedModel, XLNetModel
+from transformers import RobertaModel
 import torch
 
 class XLNetForMultiLabelClassification(XLNetPreTrainedModel):
@@ -122,6 +123,63 @@ class XLNetForMultiLabelClassification(XLNetPreTrainedModel):
 
 #         return outputs  # (loss), logits, (hidden_states), (attentions)
 
+class RobertaForMultiLabelClassification(BertPreTrainedModel):
+    def __init__(self, config):
+        super().__init__(config)
+        self.num_labels = config.num_labels
+
+        self.bert = RobertaModel(config)
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
+        self.classifier = nn.Linear(config.hidden_size, self.config.num_labels)
+        self.loss_fct = nn.BCEWithLogitsLoss()
+
+        self.init_weights()
+
+    def forward(
+            self,
+            input_ids=None,
+            attention_mask=None,
+            token_type_ids=None,
+            position_ids=None,
+            head_mask=None,
+            inputs_embeds=None,
+            labels=None,
+    ):
+        outputs = self.bert(
+            input_ids,
+            attention_mask=attention_mask,
+            token_type_ids=token_type_ids,
+            position_ids=position_ids,
+            head_mask=head_mask,
+            inputs_embeds=inputs_embeds,
+        )
+        print("outputs:")
+        print(outputs)
+
+        pooled_output = outputs[1]
+        print("pooled_output")
+        print(pooled_output)
+
+        print("pooled_output.shape", pooled_output.shape)
+
+        pooled_output = self.dropout(pooled_output)
+
+        logits = self.classifier(pooled_output)
+
+        print("logits:", logits)
+        print("logits.shape")
+        print(logits.shape)
+
+        # add hidden states and attention if they are here
+        outputs = (logits,) + outputs[2:]
+
+        if labels is not None:
+            loss = self.loss_fct(logits, labels)
+            outputs = (loss,) + outputs
+
+        return outputs  # (loss), logits, (hidden_states), (attentions)
+
+
 
 class BertForMultiLabelClassification(BertPreTrainedModel):
     def __init__(self, config):
@@ -178,3 +236,4 @@ class BertForMultiLabelClassification(BertPreTrainedModel):
             outputs = (loss,) + outputs
 
         return outputs  # (loss), logits, (hidden_states), (attentions)
+

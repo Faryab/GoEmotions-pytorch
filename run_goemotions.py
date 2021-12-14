@@ -16,13 +16,15 @@ from transformers import (
     BertTokenizer,
     XLNetConfig,
     XLNetTokenizer,
+    RobertaConfig,
+    RobertaTokenizer,
     AdamW,
     get_linear_schedule_with_warmup
 )
 
 from transformers import XLNetForSequenceClassification
 
-from model import BertForMultiLabelClassification, XLNetForMultiLabelClassification
+from model import BertForMultiLabelClassification, XLNetForMultiLabelClassification, RobertaForMultiLabelClassification
 from utils import (
     init_logger,
     set_seed,
@@ -248,7 +250,25 @@ def main(cli_args):
         #     args.model_name_or_path,
         #     config=config
         # )
-
+    elif cli_args.taxonomy == 'original-roberta':
+        config = RobertaConfig.from_pretrained(
+            args.model_name_or_path,
+            num_labels=len(label_list),
+            finetuning_task=args.task,
+            id2label={str(i): label for i, label in enumerate(label_list)},
+            label2id={label: i for i, label in enumerate(label_list)}
+        )
+        tokenizer = RobertaTokenizer.from_pretrained(
+            args.tokenizer_name_or_path,
+        )
+        model = RobertaForMultiLabelClassification.from_pretrained(
+            args.model_name_or_path,
+            config=config
+        )
+        # model = XLNetForSequenceClassification.from_pretrained(
+        #     args.model_name_or_path,
+        #     config=config
+        # )
     else:
         config = BertConfig.from_pretrained(
             args.model_name_or_path,
