@@ -34,10 +34,11 @@ class XLNetForMultiLabelClassification(XLNetPreTrainedModel):
             inputs_embeds=inputs_embeds,
         )
 
-        print("outputs")
+        print("outputs \n\n\n")
         print(outputs)
-        print("outputs.type", outputs.type)
-        print("outputs.shape: ", outputs.shape)
+        for elem in outputs:
+            print(elem)
+
         
         pooled_output = outputs[1]
 
