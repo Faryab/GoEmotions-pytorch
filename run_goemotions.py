@@ -240,7 +240,7 @@ def main(cli_args):
             label2id={label: i for i, label in enumerate(label_list)}
         )
         tokenizer = XLNetTokenizer.from_pretrained(
-            args.tokenizer_name_or_path,
+            args.tokenizer_name_or_path, 
         )
         model = XLNetForMultiLabelClassification.from_pretrained(
             args.model_name_or_path,
@@ -260,6 +260,7 @@ def main(cli_args):
         )
         tokenizer = RobertaTokenizer.from_pretrained(
             args.tokenizer_name_or_path,
+            do_lower_case=False
         )
         model = RobertaForMultiLabelClassification.from_pretrained(
             args.model_name_or_path,
