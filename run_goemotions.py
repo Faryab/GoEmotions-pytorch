@@ -362,7 +362,14 @@ def main(cli_args):
         logger.info("Evaluate the following checkpoints: %s", checkpoints)
         for checkpoint in checkpoints:
             global_step = checkpoint.split("-")[-1]
-            model = BertForMultiLabelClassification.from_pretrained(checkpoint)
+
+            if cli_args.taxonomy == 'original-xlnet':
+                model = XLNetForMultiLabelClassification.from_pretrained(checkpoint)
+            elif cli_args.taxonomy == 'original-roberta':
+                model = RobertaForMultiLabelClassification.from_pretrained(checkpoint)
+            else:
+                model = BertForMultiLabelClassification.from_pretrained(checkpoint)
+
             model.to(args.device)
             result = evaluate(args, model, test_dataset, mode="test", global_step=global_step)
             result = dict((k + "_{}".format(global_step), v) for k, v in result.items())
