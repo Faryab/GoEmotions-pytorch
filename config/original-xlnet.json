@@ -1,8 +1,8 @@
 {
   "task": "goemotions",
   "data_dir": "data/original",
-  "ckpt_dir": "ckpt/original",
-  "output_dir": "xlnet-base-cased",
+  "ckpt_dir": "drive/MyDrive/UM Academics/EECS595 Final Project/xlnet/ckpt",
+  "output_dir": "drive/MyDrive/UM Academics/EECS595 Final Project/xlnet/",
   "train_file": "train.tsv",
   "dev_file": "dev.tsv",
   "test_file": "test.tsv",
