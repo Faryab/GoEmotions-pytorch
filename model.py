@@ -92,6 +92,10 @@ class BertForMultiLabelClassification(BertPreTrainedModel):
         pooled_output = self.dropout(pooled_output)
         logits = self.classifier(pooled_output)
 
+        print("logits:", logits)
+        print("logits.shape")
+        print(logits.shape)
+        
         outputs = (logits,) + outputs[2:]  # add hidden states and attention if they are here
 
         if labels is not None:
