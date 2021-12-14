@@ -1,7 +1,7 @@
 import torch.nn as nn
 from transformers import BertPreTrainedModel, BertModel
 from transformers import XLNetPreTrainedModel, XLNetModel
-
+import torch
 
 class XLNetForMultiLabelSequenceClassification(torch.nn.Module):
 
