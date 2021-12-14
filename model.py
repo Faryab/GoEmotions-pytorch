@@ -48,13 +48,12 @@ class XLNetForMultiLabelClassification(XLNetPreTrainedModel):
         
         print("outputs")
         print(outputs)
-        print("outputs.shape: ", outputs.shape)
+        # print("outputs.shape: ", outputs.shape)
 
         if labels is not None:
             loss = self.loss_fct(logits, labels)
             outputs = (loss,) + outputs
         
-
         return outputs  # (loss), logits, (hidden_states), (attentions)
 
 
