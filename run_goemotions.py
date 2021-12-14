@@ -293,7 +293,7 @@ def main(cli_args):
             id2label={str(i): label for i, label in enumerate(label_list)},
             label2id={label: i for i, label in enumerate(label_list)}
         )
-        
+        print("helllo i am done")
         model = RobertaForMultiLabelClassification.from_pretrained(
             args.model_name_or_path,
             config=config,
