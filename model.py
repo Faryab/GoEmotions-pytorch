@@ -35,7 +35,7 @@ class XLNetForMultiLabelClassification(XLNetPreTrainedModel):
         if labels is not None:
             loss = self.loss_fct(logits.view(-1, self.num_labels),
                                  labels.view(-1, self.num_labels))
-            outputs = (loss,) + logits + last_hidden_state
+            outputs = (loss,) + outputs
 
         return outputs  # (loss), logits, (hidden_states), (attentions)
 
