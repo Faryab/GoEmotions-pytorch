@@ -6,7 +6,7 @@ import torch
 class XLNetForMultiLabelClassification(XLNetPreTrainedModel):
 
     def __init__(self, config):
-        super(XLNetForMultiLabelClassification, self).__init__()
+        super(XLNetForMultiLabelClassification, self).__init__(config)
         self.num_labels = config.num_labels
 
         self.xlnet = XLNetModel(config)
