@@ -36,25 +36,15 @@ class XLNetForMultiLabelClassification(XLNetPreTrainedModel):
 
         print("outputs \n\n\n")
         print(outputs)
-        for elem in outputs:
-            print(elem)
-
-        
-        pooled_output = outputs[1]
-
-        print("pooled_output")
-        print(pooled_output)
-        print("pooled_output ", pooled_output.shape)
 
         # pooled_output = self.dropout(pooled_output)
-        logits = self.classifier(pooled_output)
+        logits = self.classifier(outputs[0])
         
         print("logits")
         print(logits)
         print("logits.shape: ", logits.shape)
 
         outputs = (logits,) + outputs[2:]  # add hidden states and attention if they are here
-
         
         print("outputs")
         print(outputs)
