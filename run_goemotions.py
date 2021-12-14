@@ -9,6 +9,8 @@ import torch
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from tqdm import tqdm, trange
 
+import torch.nn as nn
+
 from attrdict import AttrDict
 
 from transformers import (
@@ -258,14 +260,25 @@ def main(cli_args):
             id2label={str(i): label for i, label in enumerate(label_list)},
             label2id={label: i for i, label in enumerate(label_list)}
         )
-        tokenizer = RobertaTokenizer.from_pretrained(
-            args.tokenizer_name_or_path,
-            do_lower_case=False
-        )
+        
         model = RobertaForMultiLabelClassification.from_pretrained(
             args.model_name_or_path,
             config=config
         )
+        # Update config to finetune token type embeddings
+        # model.config.type_vocab_size = 2 
+
+        # # Create a new Embeddings layer, with 2 possible segments IDs instead of 1
+        # model.embeddings.token_type_embeddings = nn.Embedding(2, model.config.hidden_size)
+                        
+        # # Initialize it
+        # model.embeddings.token_type_embeddings.weight.data.normal_(mean=0.0, std=model.config.initializer_range)
+
+        tokenizer = RobertaTokenizer.from_pretrained(
+            args.tokenizer_name_or_path,
+            do_lower_case=False
+        )
+
         # model = XLNetForSequenceClassification.from_pretrained(
         #     args.model_name_or_path,
         #     config=config
@@ -285,6 +298,7 @@ def main(cli_args):
             args.model_name_or_path,
             config=config
         )
+
 
     # GPU or CPU
     args.device = "cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu"
