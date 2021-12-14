@@ -153,22 +153,22 @@ class RobertaForMultiLabelClassification(BertPreTrainedModel):
             head_mask=head_mask,
             inputs_embeds=inputs_embeds,
         )
-        print("outputs:")
-        print(outputs)
+        # print("outputs:")
+        # print(outputs)
 
         pooled_output = outputs[1]
-        print("pooled_output")
-        print(pooled_output)
+        # print("pooled_output")
+        # print(pooled_output)
 
-        print("pooled_output.shape", pooled_output.shape)
+        # print("pooled_output.shape", pooled_output.shape)
 
         pooled_output = self.dropout(pooled_output)
 
         logits = self.classifier(pooled_output)
 
-        print("logits:", logits)
-        print("logits.shape")
-        print(logits.shape)
+        # print("logits:", logits)
+        # print("logits.shape")
+        # print(logits.shape)
 
         # add hidden states and attention if they are here
         outputs = (logits,) + outputs[2:]
