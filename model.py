@@ -87,9 +87,18 @@ class BertForMultiLabelClassification(BertPreTrainedModel):
             head_mask=head_mask,
             inputs_embeds=inputs_embeds,
         )
+        print("outputs:")
+        print(outputs)
+
+
         pooled_output = outputs[1]
+        print("pooled_output")
+        print(pooled_output)
+
+        print("pooled_output.shape", pooled_output.shape)
 
         pooled_output = self.dropout(pooled_output)
+
         logits = self.classifier(pooled_output)
 
         print("logits:", logits)
