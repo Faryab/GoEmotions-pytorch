@@ -88,7 +88,7 @@ def convert_examples_to_features(
         logger.info("tokens: {}".format(" ".join([str(x) for x in tokenizer.tokenize(example.text_a)])))
         logger.info("input_ids: {}".format(" ".join([str(x) for x in features[i].input_ids])))
         logger.info("attention_mask: {}".format(" ".join([str(x) for x in features[i].attention_mask])))
-        logger.info("token_type_ids: {}".format(" ".join([str(x) for x in features[i].token_type_ids])))
+        # logger.info("token_type_ids: {}".format(" ".join([str(x) for x in features[i].token_type_ids])))
         logger.info("label: {}".format(" ".join([str(x) for x in features[i].label])))
 
     return features
