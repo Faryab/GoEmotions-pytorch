@@ -3,7 +3,7 @@ from transformers import BertPreTrainedModel, BertModel
 from transformers import XLNetPreTrainedModel, XLNetModel
 import torch
 
-class XLNetForMultiLabelClassification(torch.nn.Module):
+class XLNetForMultiLabelClassification(XLNetPreTrainedModel):
 
     def __init__(self, config):
         super(XLNetForMultiLabelClassification, self).__init__()
