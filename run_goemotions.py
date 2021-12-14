@@ -297,7 +297,7 @@ def main(cli_args):
         model = RobertaForMultiLabelClassification.from_pretrained(
             args.model_name_or_path,
             config=config,
-            encoding='latin1'
+            # encoding='latin1'
         )
         # Update config to finetune token type embeddings
         # model.config.type_vocab_size = 2 
