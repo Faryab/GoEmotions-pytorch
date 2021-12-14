@@ -47,21 +47,26 @@ def train(args,
           dev_dataset=None,
           test_dataset=None):
     train_sampler = RandomSampler(train_dataset)
-    train_dataloader = DataLoader(train_dataset, sampler=train_sampler, batch_size=args.train_batch_size)
+    train_dataloader = DataLoader(
+        train_dataset, sampler=train_sampler, batch_size=args.train_batch_size)
     if args.max_steps > 0:
         t_total = args.max_steps
-        args.num_train_epochs = args.max_steps // (len(train_dataloader) // args.gradient_accumulation_steps) + 1
+        args.num_train_epochs = args.max_steps // (
+            len(train_dataloader) // args.gradient_accumulation_steps) + 1
     else:
-        t_total = len(train_dataloader) // args.gradient_accumulation_steps * args.num_train_epochs
+        t_total = len(
+            train_dataloader) // args.gradient_accumulation_steps * args.num_train_epochs
 
     # Prepare optimizer and schedule (linear warmup and decay)
     no_decay = ['bias', 'LayerNorm.weight']
     optimizer_grouped_parameters = [
         {'params': [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
          'weight_decay': args.weight_decay},
-        {'params': [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
+        {'params': [p for n, p in model.named_parameters() if any(
+            nd in n for nd in no_decay)], 'weight_decay': 0.0}
     ]
-    optimizer = AdamW(optimizer_grouped_parameters, lr=args.learning_rate, eps=args.adam_epsilon)
+    optimizer = AdamW(optimizer_grouped_parameters,
+                      lr=args.learning_rate, eps=args.adam_epsilon)
     scheduler = get_linear_schedule_with_warmup(
         optimizer,
         num_warmup_steps=int(t_total * args.warmup_proportion),
@@ -72,15 +77,18 @@ def train(args,
             os.path.join(args.model_name_or_path, "scheduler.pt")
     ):
         # Load optimizer and scheduler states
-        optimizer.load_state_dict(torch.load(os.path.join(args.model_name_or_path, "optimizer.pt")))
-        scheduler.load_state_dict(torch.load(os.path.join(args.model_name_or_path, "scheduler.pt")))
+        optimizer.load_state_dict(torch.load(
+            os.path.join(args.model_name_or_path, "optimizer.pt")))
+        scheduler.load_state_dict(torch.load(
+            os.path.join(args.model_name_or_path, "scheduler.pt")))
 
     # Train!
     logger.info("***** Running training *****")
     logger.info("  Num examples = %d", len(train_dataset))
     logger.info("  Num Epochs = %d", args.num_train_epochs)
     logger.info("  Total train batch size = %d", args.train_batch_size)
-    logger.info("  Gradient Accumulation steps = %d", args.gradient_accumulation_steps)
+    logger.info("  Gradient Accumulation steps = %d",
+                args.gradient_accumulation_steps)
     logger.info("  Total optimization steps = %d", t_total)
     logger.info("  Logging steps = %d", args.logging_steps)
     logger.info("  Save steps = %d", args.save_steps)
@@ -108,7 +116,7 @@ def train(args,
                     "attention_mask": batch[1],
                     "labels": batch[2]
                 }
-                
+
             outputs = model(**inputs)
 
             loss = outputs[0]
@@ -122,7 +130,8 @@ def train(args,
                     len(train_dataloader) <= args.gradient_accumulation_steps
                     and (step + 1) == len(train_dataloader)
             ):
-                torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
+                torch.nn.utils.clip_grad_norm_(
+                    model.parameters(), args.max_grad_norm)
 
                 optimizer.step()
                 scheduler.step()
@@ -131,13 +140,15 @@ def train(args,
 
                 if args.logging_steps > 0 and global_step % args.logging_steps == 0:
                     if args.evaluate_test_during_training:
-                        evaluate(args, model, test_dataset, "test", global_step)
+                        evaluate(args, model, test_dataset,
+                                 "test", global_step)
                     else:
                         evaluate(args, model, dev_dataset, "dev", global_step)
 
                 if args.save_steps > 0 and global_step % args.save_steps == 0:
                     # Save model checkpoint
-                    output_dir = os.path.join(args.output_dir, "checkpoint-{}".format(global_step))
+                    output_dir = os.path.join(
+                        args.output_dir, "checkpoint-{}".format(global_step))
                     if not os.path.exists(output_dir):
                         os.makedirs(output_dir)
                     model_to_save = (
@@ -146,13 +157,18 @@ def train(args,
                     model_to_save.save_pretrained(output_dir)
                     tokenizer.save_pretrained(output_dir)
 
-                    torch.save(args, os.path.join(output_dir, "training_args.bin"))
-                    logger.info("Saving model checkpoint to {}".format(output_dir))
+                    torch.save(args, os.path.join(
+                        output_dir, "training_args.bin"))
+                    logger.info(
+                        "Saving model checkpoint to {}".format(output_dir))
 
                     if args.save_optimizer:
-                        torch.save(optimizer.state_dict(), os.path.join(output_dir, "optimizer.pt"))
-                        torch.save(scheduler.state_dict(), os.path.join(output_dir, "scheduler.pt"))
-                        logger.info("Saving optimizer and scheduler states to {}".format(output_dir))
+                        torch.save(optimizer.state_dict(), os.path.join(
+                            output_dir, "optimizer.pt"))
+                        torch.save(scheduler.state_dict(), os.path.join(
+                            output_dir, "scheduler.pt"))
+                        logger.info(
+                            "Saving optimizer and scheduler states to {}".format(output_dir))
 
             if args.max_steps > 0 and global_step > args.max_steps:
                 break
@@ -166,11 +182,13 @@ def train(args,
 def evaluate(args, model, eval_dataset, mode, global_step=None):
     results = {}
     eval_sampler = SequentialSampler(eval_dataset)
-    eval_dataloader = DataLoader(eval_dataset, sampler=eval_sampler, batch_size=args.eval_batch_size)
+    eval_dataloader = DataLoader(
+        eval_dataset, sampler=eval_sampler, batch_size=args.eval_batch_size)
 
     # Eval!
     if global_step != None:
-        logger.info("***** Running evaluation on {} dataset ({} step) *****".format(mode, global_step))
+        logger.info(
+            "***** Running evaluation on {} dataset ({} step) *****".format(mode, global_step))
     else:
         logger.info("***** Running evaluation on {} dataset *****".format(mode))
     logger.info("  Num examples = {}".format(len(eval_dataset)))
@@ -185,12 +203,19 @@ def evaluate(args, model, eval_dataset, mode, global_step=None):
         batch = tuple(t.to(args.device) for t in batch)
 
         with torch.no_grad():
-            inputs = {
-                "input_ids": batch[0],
-                "attention_mask": batch[1],
-                "token_type_ids": batch[2],
-                "labels": batch[3]
-            }
+            if args.tokenizer_name_or_path != "roberta-base":
+                inputs = {
+                    "input_ids": batch[0],
+                    "attention_mask": batch[1],
+                    "token_type_ids": batch[2],
+                    "labels": batch[3]
+                }
+            else:
+                inputs = {
+                    "input_ids": batch[0],
+                    "attention_mask": batch[1],
+                    "labels": batch[2]
+                }
             outputs = model(**inputs)
             tmp_eval_loss, logits = outputs[:2]
 
