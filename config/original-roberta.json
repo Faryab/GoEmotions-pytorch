@@ -23,7 +23,7 @@
   "max_grad_norm": 1.0,
   "no_cuda": false,
   "model_type": "bert",
-  "model_name_or_path": "roberta-base",
+  "model_name_or_path": "/content/drive/MyDrive/EECS595 Final Project/roberta/ckpt/checkpoint-2000/pytorch_model.bin",
   "tokenizer_name_or_path": "roberta-base",
   "seed": 42,
   "train_batch_size": 64,
