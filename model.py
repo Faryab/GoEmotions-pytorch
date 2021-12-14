@@ -3,10 +3,10 @@ from transformers import BertPreTrainedModel, BertModel
 from transformers import XLNetPreTrainedModel, XLNetModel
 import torch
 
-class XLNetForMultiLabelSequenceClassification(torch.nn.Module):
+class XLNetForMultiLabelClassification(torch.nn.Module):
 
     def __init__(self, config):
-        super(XLNetForMultiLabelSequenceClassification, self).__init__()
+        super(XLNetForMultiLabelClassification, self).__init__()
         self.num_labels = config.num_labels
 
         self.xlnet = XLNetModel(config)
