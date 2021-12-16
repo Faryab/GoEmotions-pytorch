@@ -203,7 +203,7 @@ def evaluate(args, model, eval_dataset, mode, global_step=None):
         batch = tuple(t.to(args.device) for t in batch)
 
         with torch.no_grad():
-            if args.tokenizer_name_or_path != "roberta-base":
+            if "roberta" not in str(args.tokenizer_name_or_path):
                 inputs = {
                     "input_ids": batch[0],
                     "attention_mask": batch[1],
