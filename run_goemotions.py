@@ -103,7 +103,7 @@ def train(args,
         for step, batch in enumerate(epoch_iterator):
             model.train()
             batch = tuple(t.to(args.device) for t in batch)
-            if args.tokenizer_name_or_path != "roberta-base":
+            if "roberta" not in str(args.tokenizer_name_or_path):
                 inputs = {
                     "input_ids": batch[0],
                     "attention_mask": batch[1],
