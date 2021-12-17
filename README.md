@@ -1,3 +1,16 @@
+This repo is based off a fork of the [GoEmotions Pytorch Repo](https://github.com/monologg/GoEmotions-pytorch). The old README.md is found below the line.
+
+I modified the repo to train a RoBERTa and XLNET model. Corresponding notebooks can be found in the notebooks folder.
+
+You should be able to make copies of them and clone this repo to replicate the experiment.
+
+Requirements are found in `requirements.txt` and the datasets is available in the `data` folder.
+
+For any questions please email kfaryabh@umich.edu
+
+----------------------------------------------------------
+
+
 # GoEmotions Pytorch
 
 Pytorch Implementation of [GoEmotions](https://github.com/google-research/google-research/tree/master/goemotions) with [Huggingface Transformers](https://github.com/huggingface/transformers)
